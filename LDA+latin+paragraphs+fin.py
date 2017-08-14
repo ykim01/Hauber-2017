@@ -1,9 +1,6 @@
 
 # coding: utf-8
 
-# In[165]:
-
-
 from cltk.stem.lemma import LemmaReplacer
 from nltk.tokenize import RegexpTokenizer
 from cltk.stop.latin.stops import STOPS_LIST
@@ -19,54 +16,25 @@ import os
 from lxml import etree
 
 
-# In[166]:
-
-
 #file1 = '/home/ykim/Desktop/wodeham-b1-d3-qun-clean-html.xml'
 #book1 = open(file1, 'r').read()
-
-
-# In[167]:
 
 
 tree = etree.parse("/home/ykim/Desktop/wodeham-b1-d3-qun-clean-html.xml")
 doc_set = tree.xpath("//p//text()")
 
-
-# In[168]:
-
-
 doc_set
-
-
-# In[169]:
-
 
 tokenizer = RegexpTokenizer(r'\w+')
 lemmatizer = LemmaReplacer('latin')
 
-
-# In[170]:
-
-
 corpus = doc_set
-
-
-# In[171]:
-
 
 #how many paragraphs there are
 len(corpus)
 
 
-# In[172]:
-
-
 STOPS_LIST = ['ab', 'ac', 'ad', 'adhic', 'aliqui', 'aliquis', 'an', 'ante', 'apud', 'at', 'atque', 'aut', 'autem', 'cum', 'cur', 'de', 'deinde', 'dum', 'ego', 'enim', 'ergo', 'es', 'est', 'et', 'etiam', 'etsi', 'ex', 'fio', 'haud', 'hic', 'iam', 'idem', 'igitur', 'ille', 'in', 'infra', 'inter', 'interim', 'ipse', 'is', 'ita', 'magis', 'modo', 'mox', 'nam', 'ne', 'nec', 'necque', 'neque', 'nisi', 'non', 'nos', 'o', 'ob', 'per', 'possum', 'post', 'pro', 'quae', 'quam', 'quare', 'qui', 'quia', 'quicumque', 'quidem', 'quilibet', 'quis', 'quisnam', 'quisquam', 'quisque', 'quisquis', 'quo', 'quoniam', 'sed', 'si', 'sic', 'sive', 'sub', 'sui', 'sum', 'super', 'suus', 'tam', 'tamen', 'trans', 'tu', 'tum', 'ubi', 'uel', 'uero', 'unus', 'ut', 'sum1', 'qui1', 'edo1', 'quis1', 'meus', 'tantus', 'sum1', 'suum', 'quantus', 'quidam', 'eo1', "dico1", 'dico2', 'f', 'quasi', 'neo1', 'inquam', 'vel', 'que', "suo"]
-
-
-# In[173]:
-
 
 #corpus clean up
 new_corpus = []
@@ -80,61 +48,37 @@ for i in corpus:
     new_corpus.append(stopped_tokens)
     #print(stemmed_tokens)
 
-
-# In[174]:
-
-
 #creating dict of campus
 dictionary = corpora.Dictionary(new_corpus)
-
-
-# In[175]:
 
 
 #removes words that frequent more than 500 times
 dictionary.filter_n_most_frequent(500)
 
 
-# In[176]:
-
-
 #print(dictionary.token2id)
 
-
-# In[177]:
 
 
 #creates bag of words
 bags = [dictionary.doc2bow(doc) for doc in new_corpus]
 
 
-# In[199]:
-
-
 #lda model in use
 ldamodel = gensim.models.ldamodel.LdaModel(bags, num_topics=20, id2word = dictionary, passes=40)
 
 
-# In[200]:
-
 
 print(ldamodel.print_topics(num_topics=20, num_words=3))
 
-
-# In[238]:
 
 
 #example of the topics a paragraph has
 doc_1 = ldamodel[bags[1]]
 
 
-# In[239]:
-
-
 doc_1
 
-
-# In[240]:
 
 
 def highest_topic_search(doc_topics):
@@ -142,13 +86,9 @@ def highest_topic_search(doc_topics):
     return result
 
 
-# In[241]:
-
 
 target_topic = highest_topic_search(doc_1)
 
-
-# In[242]:
 
 
 #finds the paragraph with the same topic and highest %
@@ -166,27 +106,19 @@ def find_other_highest(target_t, bags, percentage):
     return result_array    
 
 
-# In[244]:
-
 
 find_other_highest(target_topic, bags, 0.50)
 
-
-# In[152]:
 
 
 #target paragraph
 paranum = 0
 
 
-# In[153]:
-
 
 #get target paragraph's topics
 target_doc_topics = ldamodel[bags[paranum]]
 
-
-# In[154]:
 
 
 search_topic_array = []
@@ -194,13 +126,10 @@ for topic in target_doc_topics:
     search_topic_array.append(topic[0])
 
 
-# In[155]:
-
 
 search_topic_array
 
 
-# In[156]:
 
 
 #find the related topics
@@ -215,26 +144,19 @@ for bag in bags:
     counter += 1
 
 
-# In[160]:
 
 
 #result_array
 
 
-# In[158]:
 
 
 #sort them by most similar
 result_array.sort(key = lambda x:x[1], reverse = True)
 
 
-# In[159]:
-
 
 result_array
-
-
-# In[ ]:
 
 
 
