@@ -1,8 +1,6 @@
 
 # coding: utf-8
 
-# In[165]:
-
 
 from cltk.stem.lemma import LemmaReplacer
 from nltk.tokenize import RegexpTokenizer
@@ -19,69 +17,36 @@ import os
 from lxml import etree
 
 
-# In[166]:
-
-
+#for a regular text file, file opening and reading
 #file1 = '/home/ykim/Desktop/wodeham-b1-d3-qun-clean-html.xml'
 #book1 = open(file1, 'r').read()
 
-
-# In[167]:
-
-
+#for a xml doc
 tree = etree.parse("/home/ykim/Desktop/wodeham-b1-d3-qun-clean-html.xml")
 doc_set = tree.xpath("//p//text()")
 
 
-# In[168]:
-
 
 doc_set
-
-
-# In[169]:
 
 
 tokenizer = RegexpTokenizer(r'\w+')
 lemmatizer = LemmaReplacer('latin')
 
 
-# In[170]:
-
-
 corpus = doc_set
-
-
-# In[171]:
 
 
 #how many paragraphs there are
 len(corpus)
 
 
-# In[172]:
-
 
 STOPS_LIST = ['ab', 'ac', 'ad', 'adhic', 'aliqui', 'aliquis', 'an', 'ante', 'apud', 'at', 'atque', 'aut', 'autem', 'cum', 'cur', 'de', 'deinde', 'dum', 'ego', 'enim', 'ergo', 'es', 'est', 'et', 'etiam', 'etsi', 'ex', 'fio', 'haud', 'hic', 'iam', 'idem', 'igitur', 'ille', 'in', 'infra', 'inter', 'interim', 'ipse', 'is', 'ita', 'magis', 'modo', 'mox', 'nam', 'ne', 'nec', 'necque', 'neque', 'nisi', 'non', 'nos', 'o', 'ob', 'per', 'possum', 'post', 'pro', 'quae', 'quam', 'quare', 'qui', 'quia', 'quicumque', 'quidem', 'quilibet', 'quis', 'quisnam', 'quisquam', 'quisque', 'quisquis', 'quo', 'quoniam', 'sed', 'si', 'sic', 'sive', 'sub', 'sui', 'sum', 'super', 'suus', 'tam', 'tamen', 'trans', 'tu', 'tum', 'ubi', 'uel', 'uero', 'unus', 'ut', 'sum1', 'qui1', 'edo1', 'quis1', 'meus', 'tantus', 'sum1', 'suum', 'quantus', 'quidam', 'eo1', "dico1", 'dico2', 'f', 'quasi', 'neo1', 'inquam', 'vel', 'que', "suo"]
 
 
-# In[173]:
-
-
 #corpus clean up
-new_corpus = []
-for i in corpus:
-    tokens = tokenizer.tokenize(i)
-    #print(tokens)
-    
-    stemmed_tokens = lemmatizer.lemmatize(tokens)
-    stopped_tokens = [w for w in stemmed_tokens if not w in STOPS_LIST]
-    
-    new_corpus.append(stopped_tokens)
-    #print(stemmed_tokens)
-
-
-# In[174]:
+latin_Corpus(corpus,tokenizer,lemmatizer,STOP_LIST)
 
 
 #creating dict of campus
