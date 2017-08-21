@@ -1,12 +1,8 @@
 
 # coding: utf-8
 
-# In[6]:
-
-
 #latin corpus clean up
-def latin_Corpus(corpus,tokenizer,lemmatizer,STOP_LIST):
-    new_corpus = []
+def latin_Corpus(corpus, new_corpus, tokenizer,lemmatizer,STOP_LIST):
     for i in corpus:
         tokens = tokenizer.tokenize(i)
 
@@ -16,12 +12,9 @@ def latin_Corpus(corpus,tokenizer,lemmatizer,STOP_LIST):
         new_corpus.append(stopped_tokens)
 
 
-# In[7]:
-
 
 #english corpus clean up
-def latin_Corpus(corpus,tokenizer,p_stemmer,STOP_LIST):
-    new_corpus = []
+def english_Corpus(corpus, new_corpus, tokenizer,p_stemmer,STOP_LIST):
     for i in corpus:
         raw = i.lower()
         tokens = tokenizer.tokenize(raw)
@@ -32,24 +25,18 @@ def latin_Corpus(corpus,tokenizer,p_stemmer,STOP_LIST):
         new_corpus.append(stemmed_tokens)
 
 
-# In[3]:
-
 
 #lda model in use
-def ldamodel(bag, num_topics, dictionary, passes, num_words):
-    ldamodel = gensim.models.ldamodel.LdaModel(bags, num_topics=20, id2word = dictionary, passes=40)
-    print(ldamodel.print_topics(num_topics=20, num_words=3))
+def ldamodel(gensim, bags, topics, dictionary, num_passes, words):
+    ldamodel = gensim.models.ldamodel.LdaModel(bags, num_topics= topics, id2word = dictionary, passes= num_passes)
+    print(ldamodel.print_topics(num_topics=topics, num_words=words))
 
-
-# In[1]:
 
 
 def highest_topic_search(doc_topics):
     result = max(doc_topics, key=lambda item: item[1])
     return result
 
-
-# In[2]:
 
 
 #finds the paragraph with the same topic and highest %
@@ -65,9 +52,6 @@ def find_other_highest(target_t, bags, percentage):
         counter += 1
     result_array.sort(key = lambda x:x[1], reverse = True)   
     return result_array   
-
-
-# In[ ]:
 
 
 
